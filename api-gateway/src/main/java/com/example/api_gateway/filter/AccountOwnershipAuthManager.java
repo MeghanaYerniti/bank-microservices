@@ -23,12 +23,12 @@ public class AccountOwnershipAuthManager implements ReactiveAuthorizationManager
     private final WebClient webClient;
 
     public AccountOwnershipAuthManager(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("http://bank-account-service").build();
+        this.webClient = webClientBuilder.baseUrl("http://bank-account-service").build(); // mapping to bank account service => base url
     }
 
     @Override
     public Mono<AuthorizationDecision> check(Mono<Authentication> authentication, AuthorizationContext context) {
-        return authentication.flatMap(auth -> {
+        return authentication.flatMap(auth -> { // unwraps the reactive obj and give actual Authentication object
             if (!(auth.getPrincipal() instanceof Jwt jwtAuth)) {
                 log.warn("Principal is not a valid JWT");
                 return Mono.just(new AuthorizationDecision(false));

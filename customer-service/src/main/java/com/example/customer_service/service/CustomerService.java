@@ -47,17 +47,11 @@ public class CustomerService {
 
         List<BankAccountDto> accounts = new ArrayList<>();
         try {
-            // Attempt to fetch accounts
             accounts = bankAccountClient.getAccountsByCustomerId(savedCustomer.getCustomerId());
-
-            // In case the service returns null (some Feign clients might)
             if (accounts == null) {
                 accounts = new ArrayList<>();
             }
         } catch (Exception e) {
-            // Log the exception for debugging
-//            log.warn("No accounts found for customer ID {} or bank account service unavailable: {}",
-//                    savedCustomer.getCustomerId(), e.getMessage());
             accounts = new ArrayList<>();
         }
 

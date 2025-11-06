@@ -27,7 +27,7 @@ public class CustomerOwnershipAuthManager implements ReactiveAuthorizationManage
 
     @Override
     public Mono<AuthorizationDecision> check(Mono<Authentication> authentication, AuthorizationContext context) {
-        return authentication.flatMap(auth -> { // unwraps the reactive obj and give actual Authentication object.
+        return authentication.flatMap(auth -> { // unwraps the reactive obj and give actual Authentication object
             Object principal = auth.getPrincipal(); // getting JWT token
             if (!(principal instanceof Jwt)) {
                 log.warn("Principal is not a Jwt: {}", principal == null ? "null" : principal.getClass().getName());
@@ -68,13 +68,11 @@ public class CustomerOwnershipAuthManager implements ReactiveAuthorizationManage
                         } else if (resp.statusCode().is4xxClientError()) { // 400 Bad request or 404 Not found
                             log.warn("Customer service returned {} for id {}", resp.statusCode(), customerId);
                             return Mono.just(false);
-                        } else { // for remaining (500)
-                            log.error("Customer service returned {} for id {}", resp.statusCode(), customerId);
+                        } else {
                             return Mono.just(false);
                         }
-                    })// If the WebClient call fails entirely (e.g., service down, timeout), this block executes.
+                    })
                     .onErrorResume(e -> {
-                        log.error("Error calling customer-service for id {}: {}", customerId, e.toString());
                         return Mono.just(false);
                     })
                     .map(AuthorizationDecision::new); // converting boolean to AuthorizationDecision
