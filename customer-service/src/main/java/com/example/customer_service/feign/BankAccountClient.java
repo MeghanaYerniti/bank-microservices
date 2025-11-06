@@ -13,9 +13,9 @@ import java.util.List;
 @FeignClient("BANK-ACCOUNT-SERVICE")
 public interface BankAccountClient {
 
-    @GetMapping("/api/v1/accounts/by-customer/{customerId}")
+    @GetMapping("/accounts/by-customer/{customerId}")
     public List<BankAccountDto> getAccountsByCustomerId(@PathVariable Long customerId);
 
-    @PutMapping("/api/v1/accounts/update-name/{customerId}")
+    @PutMapping("/accounts/update-name/{customerId}")
     public void updateAccountHolderName(@PathVariable Long customerId, @RequestParam String newName);
 }

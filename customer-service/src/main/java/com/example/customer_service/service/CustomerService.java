@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,24 +33,38 @@ public class CustomerService {
     }
 
 
-    // what about account bank account creation ?
     public CustomerWithAccounts createCustomer(@Valid CustomerDto customerDTO) {
-
         CustomerEntity customerEntity = customerMapper.toEntity(customerDTO);
 
-
-        if (customerEntity.getCreatedAt() == null) customerEntity.setCreatedAt(LocalDateTime.now());
-        if (customerEntity.getUpdatedAt() == null) customerEntity.setUpdatedAt(LocalDateTime.now());
+        if (customerEntity.getCreatedAt() == null) {
+            customerEntity.setCreatedAt(LocalDateTime.now());
+        }
+        if (customerEntity.getUpdatedAt() == null) {
+            customerEntity.setUpdatedAt(LocalDateTime.now());
+        }
 
         CustomerEntity savedCustomer = customerRepository.save(customerEntity);
 
-        List<BankAccountDto> accounts = bankAccountClient.getAccountsByCustomerId(savedCustomer.getCustomerId());
+        List<BankAccountDto> accounts = new ArrayList<>();
+        try {
+            // Attempt to fetch accounts
+            accounts = bankAccountClient.getAccountsByCustomerId(savedCustomer.getCustomerId());
 
-        CustomerDto customerDto  = customerMapper.toDTO(savedCustomer);
-//        responseDto.setAccounts(accounts);
+            // In case the service returns null (some Feign clients might)
+            if (accounts == null) {
+                accounts = new ArrayList<>();
+            }
+        } catch (Exception e) {
+            // Log the exception for debugging
+//            log.warn("No accounts found for customer ID {} or bank account service unavailable: {}",
+//                    savedCustomer.getCustomerId(), e.getMessage());
+            accounts = new ArrayList<>();
+        }
 
+        CustomerDto customerDto = customerMapper.toDTO(savedCustomer);
         return new CustomerWithAccounts(customerDto, accounts);
     }
+
 
 
     public CustomerDto updateCustomer(Long id, CustomerDto updatedCustomer) {

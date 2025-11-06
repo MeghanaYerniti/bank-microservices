@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/accounts")
+@RequestMapping("/accounts")
 @RequiredArgsConstructor
 public class BankAccountController {
 
@@ -22,7 +22,7 @@ public class BankAccountController {
         return bankAccountService.createAccount(bankAccountDto);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public BankAccountDto getAccount(@PathVariable Long id) {
         return bankAccountService.getAccount(id);
     }

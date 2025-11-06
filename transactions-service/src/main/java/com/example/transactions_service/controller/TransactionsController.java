@@ -10,19 +10,19 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/transactions")
+@RequestMapping("/transactions")
 @RequiredArgsConstructor
 public class TransactionsController {
 
     private final TransactionsService transactionsService;
 //    private final TransactionsMapper transactionsMapper;
 
-    @GetMapping("/")
+    @GetMapping("/all")
     public List<TransactionsDto> getAllTransactions() {
         return transactionsService.getAllTransactions();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public TransactionsDto getTransaction(@PathVariable UUID id) {
         return transactionsService.getTransaction(id);
     }

@@ -42,8 +42,14 @@ public class BankAccountService {
 
         BankAccountEntity bankAccountEntity = bankAccountMapper.toEntity(bankAccountDto);
         Long customerId = bankAccountEntity.getCustomerId();
-        CustomerDto customerDto = customerClient.getCustomer(customerId);
+        CustomerDto customerDto = customerClient.getCustomer(bankAccountDto.getCustomerId());
+
         if (customerDto == null) throw new CustomerNotFoundException("Customer not found");
+
+        if(!bankAccountDto.getCustomerId().equals(customerDto.getCustomerId()) || !bankAccountDto.getAccountHolderName().equals(customerDto.getName())) {
+            throw new InvalidNameException("Invalid account holder name");
+        }
+
         if (bankAccountEntity.getCreatedAt() == null) bankAccountEntity.setCreatedAt(LocalDateTime.now());
         if (bankAccountEntity.getUpdatedAt() == null) bankAccountEntity.setUpdatedAt(LocalDateTime.now());
 

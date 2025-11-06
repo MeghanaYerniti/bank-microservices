@@ -14,16 +14,8 @@ public interface BankAccountRepository extends JpaRepository<BankAccountEntity, 
 
     List<BankAccountEntity> findByCustomerId(Long customerId);
 
-//    @Query(value = "SELECT * FROM bank_account " +
-//            "ORDER BY balance DESC " +
-//            "LIMIT 5",
-//            nativeQuery = true)
-//    List<BankAccountEntity> findTop5AccountsByBalance();
     List<BankAccountEntity> findTop5ByOrderByBalanceDesc();
 
-    // in version 2
-//    @Query("SELECT a FROM BankAccountEntity a WHERE a.accountType = :accountType")
-//    List<BankAccountEntity> findAccountsByType(@Param("accountType") AccountType accountType);
     List<BankAccountEntity> findByAccountType(AccountType accountType);
 
 }

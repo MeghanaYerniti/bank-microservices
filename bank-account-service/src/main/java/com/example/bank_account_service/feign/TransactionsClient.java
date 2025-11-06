@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient("TRANSACTIONS-SERVICE")
 public interface TransactionsClient {
 
-    @PostMapping("/api/v1/transactions/deposit")
+    @PostMapping("/transactions/deposit")
     public ResponseEntity<TransactionsDto> deposit(@RequestBody TransactionsDto dto);
 
-    @PostMapping("/api/v1/transactions/withdraw")
+    @PostMapping("/transactions/withdraw")
     public ResponseEntity<TransactionsDto> withdraw(@RequestBody TransactionsDto dto);
 
 }

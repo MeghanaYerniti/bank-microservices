@@ -12,14 +12,14 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/api/v1/customers")
+@RequestMapping("/customers")
 @RequiredArgsConstructor
 public class CustomerController {
 
     private final CustomerService customerService;
     private final CustomerMapper bankMapper;
 
-    @GetMapping("/")
+    @GetMapping("/all")
     public List<CustomerDto> getAllCustomers() {
         return customerService.getAllCustomers();
     }
@@ -34,7 +34,7 @@ public class CustomerController {
         return customerService.updateCustomer(id, customerDTO);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public CustomerDto getCustomer(@PathVariable Long id) {
         return customerService.getCustomer(id);
     }

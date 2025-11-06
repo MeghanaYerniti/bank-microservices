@@ -1,7 +1,9 @@
 package com.example.bank_account_service.config;
 
 import com.example.bank_account_service.exception.*;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.TransactionSystemException;
@@ -22,22 +24,27 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(CustomerNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleCustomerNotFoundException(InsufficientFundsException ex, WebRequest request) {
+    public ResponseEntity<Map<String, Object>> handleCustomerNotFoundException(CustomerNotFoundException ex, WebRequest request) {
         return buildErrorResponse(HttpStatus.BAD_REQUEST, "Customer not Found", ex.getMessage(), request);
     }
 
+    @ExceptionHandler(InvalidNameException.class)
+    public ResponseEntity<Map<String, Object>> handleInvalidNameException(InvalidNameException ex, WebRequest request) {
+        return buildErrorResponse(HttpStatus.BAD_REQUEST, "Invalid account holder name", ex.getMessage(), request);
+    }
+
     @ExceptionHandler(ClosedAccountException.class)
-    public ResponseEntity<Map<String, Object>> handleClosedAccountException(InsufficientFundsException ex, WebRequest request) {
+    public ResponseEntity<Map<String, Object>> handleClosedAccountException(ClosedAccountException ex, WebRequest request) {
         return buildErrorResponse(HttpStatus.BAD_REQUEST, "Can't perform deposit transaction since account is closed", ex.getMessage(), request);
     }
 
     @ExceptionHandler(InterestMustBeZeroException.class)
-    public ResponseEntity<Map<String, Object>> handleInterestMustBeZeroException(InsufficientFundsException ex, WebRequest request) {
+    public ResponseEntity<Map<String, Object>> handleInterestMustBeZeroException(InterestMustBeZeroException ex, WebRequest request) {
         return buildErrorResponse(HttpStatus.BAD_REQUEST, "Interest rate must be 0 for CURRENT accounts", ex.getMessage(), request);
     }
 
     @ExceptionHandler(AccountNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleAccountNotFoundException(InsufficientFundsException ex, WebRequest request) {
+    public ResponseEntity<Map<String, Object>> handleAccountNotFoundException(AccountNotFoundException ex, WebRequest request) {
         return buildErrorResponse(HttpStatus.BAD_REQUEST, "Account not Found", ex.getMessage(), request);
     }
 
@@ -47,8 +54,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ZeroBalanceException.class)
-    public ResponseEntity<Map<String, Object>> handleZeroBalanceException(MinimumBalanceException ex, WebRequest request) {
+    public ResponseEntity<Map<String, Object>> handleZeroBalanceException(ZeroBalanceException ex, WebRequest request) {
         return buildErrorResponse(HttpStatus.BAD_REQUEST, "Deposit cannot result in a negative balance", ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<Map<String, Object>> handleForbidden(ForbiddenException ex, WebRequest req) {
+        return buildErrorResponse(HttpStatus.BAD_REQUEST, "Forbidden", ex.getMessage(), req);
     }
 
     @ExceptionHandler(HighValueTransactionException.class)

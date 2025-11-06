@@ -37,15 +37,10 @@ public class BankAccountEntity {
     @Column(name = "account_id")
     private Long accountId;
 
-//    @ManyToOne
-//    @JoinColumn(name = "customer_id", nullable = false) // specify foreign key
-////    @JsonBackReference
-//    private CustomerEntity customer;
-
     @Column(name="customer_id", nullable = false)
     private Long customerId;
 
-    @Column(name = "account_holder_name")
+    @Column(name = "account_holder_name", unique = true, nullable = false)
     private String accountHolderName;
 
     @Enumerated(EnumType.STRING) // specify enum type

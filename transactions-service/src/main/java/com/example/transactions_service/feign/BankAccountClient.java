@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient("BANK-ACCOUNT-SERVICE")
 public interface BankAccountClient {
 
-    @GetMapping("/api/v1/accounts/{id}")
+    @GetMapping("/accounts/id/{id}")
     public BankAccountDto getAccount(@PathVariable Long id);
 
-    @PutMapping("/api/v1/accounts/update-balance/{accountId}")
+    @PutMapping("/accounts/update-balance/{accountId}")
     public ResponseEntity<String> updateBalance(@PathVariable Long accountId, @RequestParam("balance") double balance);
 }
